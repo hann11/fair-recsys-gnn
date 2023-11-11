@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile="black"
+
+[tool.ruff]
+ignore = ["E501","E741","E402"]
+exclude = [
+    ".venv",
+    "venv",
+    "__pycache__",
+]
