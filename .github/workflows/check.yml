@@ -2,23 +2,6 @@ name: Check
 on: push
 
 jobs:
-  black:
-    name: Black
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install black
-        run: pip install black
-
-      - name: Black
-        run: black --check .
-
   ruff:
     name: Ruff
     runs-on: ubuntu-20.04
@@ -50,3 +33,20 @@ jobs:
 
       - name: Check isort
         run: isort . --check-only --verbose
+
+  black:
+    name: Black
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install black
+        run: pip install black
+
+      - name: Black
+        run: black --check .
