@@ -1,4 +1,4 @@
-from src.utils.metrics import precision_at_k
+from fairgnn.utils.metrics import precision_at_k
 
 
 def test_precision():

@@ -8,8 +8,8 @@ import heapq
 import multiprocessing
 
 import numpy as np
+from kgat_metrics import hit_at_k, ndcg_at_k, precision_at_k, recall_at_k
 from loader_kgat import KGAT_loader
-from metrics import hit_at_k, ndcg_at_k, precision_at_k, recall_at_k
 from sklearn.metrics import roc_auc_score
 
 from .parser import parse_args
