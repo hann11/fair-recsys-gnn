@@ -43,7 +43,7 @@ def diversity(item_ids: list[int], item_embed: pd.DataFrame) -> float:
     if n_items == 1:
         return 1
 
-    div = 0
+    div = 0.0  # type: ignore
 
     df_embed = item_embed[item_embed["item_id"].isin(item_ids)]
 
@@ -52,7 +52,7 @@ def diversity(item_ids: list[int], item_embed: pd.DataFrame) -> float:
     for i in range(n_items):
         for j in range(n_items):
             if i != j:
-                div += np.linalg.norm(np_embed[i] - np_embed[j])
+                div += np.linalg.norm(np_embed[i] - np_embed[j])  # type: ignore
 
     return div / n_items * (n_items - 1)
 

@@ -6,11 +6,13 @@ Wang Xiang et al. KGAT: Knowledge Graph Attention Network for Recommendation. In
 """
 import heapq
 import multiprocessing
-from parser import parse_args
 
-import metrics as metrics
 import numpy as np
 from loader_kgat import KGAT_loader
+from metrics import hit_at_k, ndcg_at_k, precision_at_k, recall_at_k
+from sklearn.metrics import roc_auc_score
+
+from .parser import parse_args
 
 cores = multiprocessing.cpu_count() // 2
 
@@ -57,8 +59,8 @@ def get_auc(item_score, user_pos_test):
             r.append(1)
         else:
             r.append(0)
-    auc = metrics.auc(ground_truth=r, prediction=posterior)
-    return auc
+    auc_result = roc_auc_score(ground_truth=r, prediction=posterior)
+    return auc_result
 
 
 def ranklist_by_sorted(user_pos_test, test_items, rating, Ks):
@@ -83,10 +85,10 @@ def get_performance(user_pos_test, r, auc, Ks):
     precision, recall, ndcg, hit_ratio = [], [], [], []
 
     for K in Ks:
-        precision.append(metrics.precision_at_k(r, K))
-        recall.append(metrics.recall_at_k(r, K, len(user_pos_test)))
-        ndcg.append(metrics.ndcg_at_k(r, K))
-        hit_ratio.append(metrics.hit_at_k(r, K))
+        precision.append(precision_at_k(r, K))
+        recall.append(recall_at_k(r, K, len(user_pos_test)))
+        ndcg.append(ndcg_at_k(r, K))
+        hit_ratio.append(hit_at_k(r, K))
 
     return {
         "recall": np.array(recall),
@@ -144,7 +146,6 @@ def test(sess, model, users_to_test, drop_flag=False, batch_test_flag=False):
     pool = multiprocessing.Pool(cores)
 
     if args.model_type in ["ripple"]:
-
         u_batch_size = BATCH_SIZE
         i_batch_size = BATCH_SIZE // 20
     elif args.model_type in ["fm", "nfm"]:
@@ -167,7 +168,6 @@ def test(sess, model, users_to_test, drop_flag=False, batch_test_flag=False):
         user_batch = test_users[start:end]
 
         if batch_test_flag:
-
             n_item_batchs = ITEM_NUM // i_batch_size + 1
             rate_batch = np.zeros(shape=(len(user_batch), ITEM_NUM))
 

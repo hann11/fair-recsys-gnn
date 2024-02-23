@@ -1,13 +1,23 @@
-[tool.black]
-line-length = 80
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error::DeprecationWarning",
+    "ignore::DeprecationWarning:pytest.*:",
+]
 
-[tool.isort]
-profile="black"
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+no_strict_optional = true
+
+# https://github.com/python/mypy/issues/10632
+[[tool.mypy.overrides]]
+module = ["requests", "pytz"]
+ignore_missing_imports = true
 
 [tool.ruff]
-ignore = ["E501","E741","E402"]
-exclude = [
-    ".venv",
-    "venv",
-    "__pycache__",
-]
+exclude = [".venv", "venv", "__pycache__"]
+line-length = 80
+# TODO: Add when available: "E266", "E203"
+lint.ignore = ["E501", "E741", "E402"]
+lint.select = ['E', 'F', 'W', 'I']

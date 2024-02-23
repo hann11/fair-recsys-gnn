@@ -7,6 +7,7 @@ Wang Xiang et al. KGAT: Knowledge Graph Attention Network for Recommendation. In
 import collections
 import random as rd
 from time import time
+from typing import Dict, List
 
 import numpy as np
 import scipy.sparse as sp
@@ -65,7 +66,7 @@ class KGAT_loader(Data):
         adj_r_list.append(0)
 
         adj_mat_list.append(R_inv)
-        adj_r_list.append(self.n_relations + 1)
+        adj_r_list.append(self.n_relations + 1)  # type: ignore
         print("\tconvert ratings into adj mat done.")
 
         for r_id in self.relation_dict.keys():
@@ -78,7 +79,7 @@ class KGAT_loader(Data):
             adj_r_list.append(r_id + 1)
 
             adj_mat_list.append(K_inv)
-            adj_r_list.append(r_id + 2 + self.n_relations)
+            adj_r_list.append(r_id + 2 + self.n_relations)  # type: ignore
         print(
             "\tconvert %d relational triples into adj mat done. @%.4fs"
             % (len(adj_mat_list), time() - t1)
@@ -121,7 +122,6 @@ class KGAT_loader(Data):
     def _get_all_kg_dict(self):
         all_kg_dict = collections.defaultdict(list)
         for l_id, lap in enumerate(self.lap_list):
-
             rows = lap.row
             cols = lap.col
 
@@ -153,7 +153,7 @@ class KGAT_loader(Data):
         # resort the all_h/t/r/v_list,
         # ... since tensorflow.sparse.softmax requires indices sorted in the canonical lexicographic order
         print("\treordering indices...")
-        org_h_dict = dict()
+        org_h_dict: Dict[str, list] = {}
 
         for idx, h in enumerate(all_h_list):
             if h not in org_h_dict.keys():
@@ -164,7 +164,7 @@ class KGAT_loader(Data):
             org_h_dict[h][2].append(all_v_list[idx])
         print("\treorganize all kg data done.")
 
-        sorted_h_dict = dict()
+        sorted_h_dict: Dict[str, list] = {}
         for h in org_h_dict.keys():
             org_t_list, org_r_list, org_v_list = org_h_dict[h]
             sort_t_list = np.array(org_t_list)
@@ -210,7 +210,9 @@ class KGAT_loader(Data):
             pos_triples = self.all_kg_dict[h]
             n_pos_triples = len(pos_triples)
 
-            pos_rs, pos_ts = [], []
+            pos_rs: List[int] = []
+            pos_ts: List[int] = []
+
             while True:
                 if len(pos_rs) == num:
                     break
@@ -225,7 +227,7 @@ class KGAT_loader(Data):
             return pos_rs, pos_ts
 
         def sample_neg_triples_for_h(h, r, num):
-            neg_ts = []
+            neg_ts: List[int] = []
             while True:
                 if len(neg_ts) == num:
                     break
@@ -294,7 +296,6 @@ class KGAT_loader(Data):
     def generate_test_feed_dict(
         self, model, user_batch, item_batch, drop_flag=True
     ):
-
         feed_dict = {
             model.users: user_batch,
             model.pos_items: item_batch,

@@ -554,7 +554,7 @@ class KGAT(object):
 
     def update_attentive_A(self, sess):
         fold_len = len(self.all_h_list) // self.n_fold
-        kg_score = []
+        kg_score_list = []
 
         for i_fold in range(self.n_fold):
             start = i_fold * fold_len
@@ -569,9 +569,9 @@ class KGAT(object):
                 self.pos_t: self.all_t_list[start:end],
             }
             A_kg_score = sess.run(self.A_kg_score, feed_dict=feed_dict)
-            kg_score += list(A_kg_score)
+            kg_score_list += list(A_kg_score)
 
-        kg_score = np.array(kg_score)
+        kg_score = np.array(kg_score_list)
 
         new_A = sess.run(self.A_out, feed_dict={self.A_values: kg_score})
         new_A_values = new_A.values

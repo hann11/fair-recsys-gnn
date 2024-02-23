@@ -6,6 +6,7 @@ Wang Xiang et al. KGAT: Knowledge Graph Attention Network for Recommendation. In
 """
 import collections
 import random as rd
+from typing import Dict, List
 
 import numpy as np
 
@@ -117,7 +118,7 @@ class Data(object):
         def sample_pos_items_for_u(u, num):
             pos_items = self.train_user_dict[u]
             n_pos_items = len(pos_items)
-            pos_batch = []
+            pos_batch: List[int] = []
             while True:
                 if len(pos_batch) == num:
                     break
@@ -129,7 +130,7 @@ class Data(object):
             return pos_batch
 
         def sample_neg_items_for_u(u, num):
-            neg_items = []
+            neg_items: List[int] = []
             while True:
                 if len(neg_items) == num:
                     break
@@ -178,7 +179,7 @@ class Data(object):
 
     def create_sparsity_split(self):
         all_users_to_test = list(self.test_user_dict.keys())
-        user_n_iid = dict()
+        user_n_iid: Dict[int, List[int]] = {}
 
         # generate a dictionary to store (key=n_iids, value=a list of uid).
         for uid in all_users_to_test:
@@ -211,7 +212,11 @@ class Data(object):
 
                 state = (
                     "#inter per user<=[%d], #users=[%d], #all rates=[%d]"
-                    % (n_iids, len(temp), n_rates)
+                    % (
+                        n_iids,
+                        len(temp),
+                        n_rates,
+                    )
                 )
                 split_state.append(state)
                 print(state)
@@ -225,7 +230,11 @@ class Data(object):
 
                 state = (
                     "#inter per user<=[%d], #users=[%d], #all rates=[%d]"
-                    % (n_iids, len(temp), n_rates)
+                    % (
+                        n_iids,
+                        len(temp),
+                        n_rates,
+                    )
                 )
                 split_state.append(state)
                 print(state)

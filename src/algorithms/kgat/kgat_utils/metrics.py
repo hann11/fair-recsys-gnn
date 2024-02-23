@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import log_loss, roc_auc_score
+from sklearn.metrics import log_loss
 
 
 def recall(rank, ground_truth, N):
@@ -40,7 +40,7 @@ def mean_average_precision(rs):
     Returns:
         Mean average precision
     """
-    return np.mean([average_precision(r) for r in rs])
+    return np.mean([average_precision(r, len(rs)) for r in rs])
 
 
 def dcg_at_k(r, k, method=1):
@@ -92,14 +92,6 @@ def F1(pre, rec):
         return (2.0 * pre * rec) / (pre + rec)
     else:
         return 0.0
-
-
-def auc(ground_truth, prediction):
-    try:
-        res = roc_auc_score(y_true=ground_truth, y_score=prediction)
-    except Exception:
-        res = 0.0
-    return res
 
 
 def logloss(ground_truth, prediction):

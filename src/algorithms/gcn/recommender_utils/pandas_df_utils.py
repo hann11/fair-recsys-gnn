@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from functools import lru_cache, wraps
+from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -162,7 +163,7 @@ class LibffmConverter:
         types = df.dtypes
         if not all(
             [
-                x == object or np.issubdtype(x, np.integer) or x == np.float
+                x == object or np.issubdtype(x, np.integer) or x == np.float  # type: ignore
                 for x in types
             ]
         ):
@@ -206,7 +207,7 @@ class LibffmConverter:
 
         # Encode field-feature.
         idx = 1
-        self.field_feature_dict = {}
+        self.field_feature_dict: Dict[Tuple, int] = {}
         for field in self.field_names:
             for feature in df[field].values:
                 # Check whether (field, feature) tuple exists in the dict or not.
@@ -500,8 +501,8 @@ def lru_cache_df(maxsize, typed=False):
             return user_function(*args, **kwargs)
 
         # retain lru_cache attributes
-        wrapper.cache_info = cached_wrapper.cache_info
-        wrapper.cache_clear = cached_wrapper.cache_clear
+        wrapper.cache_info = cached_wrapper.cache_info  # type: ignore
+        wrapper.cache_clear = cached_wrapper.cache_clear  # type: ignore
 
         return wrapper
 

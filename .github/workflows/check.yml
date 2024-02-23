@@ -1,5 +1,9 @@
 name: Check
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   ruff:
@@ -11,31 +15,16 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.8"
 
-      - name: Install ruff
-        run: pip install ruff
+      - run: pip install ruff
 
-      - name: Check lint with Ruff
-        run: ruff check .
+      - run: ruff check
 
-  isort:
-    name: Isort
-    runs-on: ubuntu-20.04
+      - run: ruff format --check
 
-    steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install isort
-        run: pip install isort
-
-      - name: Check isort
-        run: isort . --check-only --verbose
-
-  black:
-    name: Black
+  mypy:
+    name: MyPy
     runs-on: ubuntu-20.04
 
     steps:
@@ -43,10 +32,27 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.8"
 
-      - name: Install black
-        run: pip install black
+      - name: Install mypy
+        run: pip install mypy
 
-      - name: Black
-        run: black --check .
+      - name: Run
+        run: mypy .
+
+  pytest:
+    name: Pytest
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install dev dependencies
+        run: pip install pytest pandas
+
+      - name: Run
+        run: pytest -v .

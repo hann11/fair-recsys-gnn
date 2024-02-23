@@ -10,11 +10,10 @@ from time import time
 
 import numpy as np
 import tensorflow as tf
+from kgat.utils.helper import early_stopping, ensureDir
 from kgat_utils.batch_test import (
     batch_test_flag,
     data_generator,
-    early_stopping,
-    ensureDir,
     parse_args,
     test,
 )
@@ -107,7 +106,7 @@ if __name__ == "__main__":
         save_saver = tf.train.Saver(max_to_keep=1)
 
     config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
+    config.gpu_options.allow_growth = True  # type: ignore
     sess = tf.Session(config=config)
 
     """
@@ -115,7 +114,6 @@ if __name__ == "__main__":
     Reload the model parameters to fine tune.
     """
     if args.pretrain == 1:
-
         layer = "-".join([str(l) for l in eval(args.layer_size)])
         pretrain_path = "%sweights/%s/%s/%s/l%s_r%s" % (
             args.weights_path,
@@ -320,7 +318,6 @@ if __name__ == "__main__":
         ... phase 2: to train the KGE method & update the attentive Laplacian matrix.
         """
         if args.model_type in ["kgat"]:
-
             n_A_batch = len(data_generator.all_h_list) // args.batch_size_kg + 1
 
             if args.use_kge is True:
@@ -357,7 +354,14 @@ if __name__ == "__main__":
             if args.verbose > 0 and epoch % args.verbose == 0:
                 perf_str = (
                     "Epoch %d [%.1fs]: train==[%.5f=%.5f + %.5f + %.5f]"
-                    % (epoch, time() - t1, loss, base_loss, kge_loss, reg_loss)
+                    % (
+                        epoch,
+                        time() - t1,
+                        loss,
+                        base_loss,
+                        kge_loss,
+                        reg_loss,
+                    )
                 )
                 print(perf_str)
             continue

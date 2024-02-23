@@ -56,7 +56,7 @@ def _check_column_dtypes(func):
         col_rating=DEFAULT_RATING_COL,
         col_prediction=DEFAULT_PREDICTION_COL,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """Check columns of DataFrame inputs
 
@@ -88,7 +88,7 @@ def _check_column_dtypes(func):
             col_rating=col_rating,
             col_prediction=col_prediction,
             *args,
-            **kwargs
+            **kwargs,
         )
 
     return check_column_dtypes_wrapper
@@ -430,7 +430,7 @@ def precision_at_k(
     relevancy_method="top_k",
     k=DEFAULT_K,
     threshold=DEFAULT_THRESHOLD,
-    **kwargs
+    **kwargs,
 ):
     """Precision at K.
 
@@ -484,7 +484,7 @@ def recall_at_k(
     relevancy_method="top_k",
     k=DEFAULT_K,
     threshold=DEFAULT_THRESHOLD,
-    **kwargs
+    **kwargs,
 ):
     """Recall at K.
 
@@ -534,7 +534,7 @@ def ndcg_at_k(
     threshold=DEFAULT_THRESHOLD,
     score_type="binary",
     discfun_type="loge",
-    **kwargs
+    **kwargs,
 ):
     """Normalized Discounted Cumulative Gain (nDCG).
 
@@ -592,9 +592,9 @@ def ndcg_at_k(
         raise ValueError("score_type must be one of 'binary', 'raw', 'exp'")
 
     if discfun_type == "loge":
-        discfun = np.log
+        discfun = np.log  # type: ignore
     elif discfun_type == "log2":
-        discfun = np.log2
+        discfun = np.log2  # type: ignore
     else:
         raise ValueError("discfun_type must be one of 'loge', 'log2'")
 
@@ -636,7 +636,7 @@ def map_at_k(
     relevancy_method="top_k",
     k=DEFAULT_K,
     threshold=DEFAULT_THRESHOLD,
-    **kwargs
+    **kwargs,
 ):
     """Mean Average Precision at k
 
@@ -809,7 +809,7 @@ def _check_column_dtypes_diversity_serendipity(func):
         col_sim=DEFAULT_SIMILARITY_COL,
         col_relevance=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """Check columns of DataFrame inputs
 
@@ -883,7 +883,7 @@ def _check_column_dtypes_diversity_serendipity(func):
             col_sim=col_sim,
             col_relevance=col_relevance,
             *args,
-            **kwargs
+            **kwargs,
         )
 
     return check_column_dtypes_diversity_serendipity_wrapper
@@ -912,7 +912,7 @@ def _check_column_dtypes_novelty_coverage(func):
         col_user=DEFAULT_USER_COL,
         col_item=DEFAULT_ITEM_COL,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """Check columns of DataFrame inputs
 
@@ -952,7 +952,7 @@ def _check_column_dtypes_novelty_coverage(func):
             col_user=col_user,
             col_item=col_item,
             *args,
-            **kwargs
+            **kwargs,
         )
 
     return check_column_dtypes_novelty_coverage_wrapper
@@ -989,7 +989,6 @@ def _get_cosine_similarity(
     col_item=DEFAULT_ITEM_COL,
     col_sim=DEFAULT_SIMILARITY_COL,
 ):
-
     if item_sim_measure == "item_cooccurrence_count":
         # calculate item-item similarity based on item co-occurrence count
         df_cosine_similarity = _get_cooccurrence_similarity(
