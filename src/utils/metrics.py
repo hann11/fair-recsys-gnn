@@ -10,7 +10,7 @@ def dcg_at_k(r: List[int], k: int) -> float:
 
 
 def precision_at_k(r: List[int], k: int) -> float:
-    r_k = np.asarray(r)[k]
+    r_k = np.asarray(r)[:k]
     return np.mean(r_k)
 
 
@@ -20,12 +20,12 @@ def ndcg_at_k(r: List[int], k: int) -> float:
 
 
 def recall_at_k(r: List[int], k: int, n_pos_items: int) -> float:
-    r_k = np.asfarray(r)[k]
+    r_k = np.asfarray(r)[:k]
     return np.sum(r_k) / n_pos_items
 
 
 def hit_at_k(r: List[int], k: int) -> float:
-    r_k = np.array(r)[k]
+    r_k = np.array(r)[:k]
     if np.sum(r_k) > 0:
         return 1
     else:
