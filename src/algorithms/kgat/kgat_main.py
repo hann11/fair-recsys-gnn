@@ -11,7 +11,7 @@ from time import time
 import numpy as np
 import tensorflow as tf
 from kgat.utils.helper import early_stopping, ensureDir
-from kgat_utils.batch_test import (
+from kgat_utils.batch_tester import (
     batch_test_flag,
     data_generator,
     parse_args,

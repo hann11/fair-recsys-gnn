@@ -1,28 +1,30 @@
+from typing import List
+
 import numpy as np
 import pandas as pd
 
 
-def dcg_at_k(r: list[int], k: int) -> float:
+def dcg_at_k(r: List[int], k: int) -> float:
     r_k = np.asfarray(r)[:k]
     return np.sum(r_k / np.log2(np.arange(2, r_k.size + 2)))
 
 
-def precision_at_k(r: list[int], k: int) -> float:
+def precision_at_k(r: List[int], k: int) -> float:
     r_k = np.asarray(r)[k]
     return np.mean(r_k)
 
 
-def ndcg_at_k(r: list[int], k: int) -> float:
+def ndcg_at_k(r: List[int], k: int) -> float:
     dcg_max = dcg_at_k(sorted(r, reverse=True), k)
     return dcg_at_k(r, k) / dcg_max
 
 
-def recall_at_k(r: list[int], k: int, n_pos_items: int) -> float:
+def recall_at_k(r: List[int], k: int, n_pos_items: int) -> float:
     r_k = np.asfarray(r)[k]
     return np.sum(r_k) / n_pos_items
 
 
-def hit_at_k(r: list[int], k: int) -> float:
+def hit_at_k(r: List[int], k: int) -> float:
     r_k = np.array(r)[k]
     if np.sum(r_k) > 0:
         return 1
@@ -37,7 +39,7 @@ def f1_score(precision: float, recall: float) -> float:
         return 0
 
 
-def diversity(item_ids: list[int], item_embed: pd.DataFrame) -> float:
+def diversity(item_ids: List[int], item_embed: pd.DataFrame) -> float:
     n_items = len(item_ids)
 
     if n_items == 1:
@@ -57,7 +59,7 @@ def diversity(item_ids: list[int], item_embed: pd.DataFrame) -> float:
     return div / n_items * (n_items - 1)
 
 
-def novelty(item_ids: list[int], item_counts: pd.DataFrame) -> float:
+def novelty(item_ids: List[int], item_counts: pd.DataFrame) -> float:
     n_items = len(item_ids)
 
     df_novelty = item_counts[item_counts["item_id"].isin(item_ids)]
